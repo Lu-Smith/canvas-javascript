@@ -1,6 +1,7 @@
 const canvas = document.getElementById("canvas1");
 const ctx = canvas.getContext("2d");
 const particlesArray = [];
+let hue = 0;
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
@@ -16,12 +17,17 @@ const mouse = {
 canvas.addEventListener("click", function (event) {
   mouse.x = event.x;
   mouse.y = event.y;
+  for (let i = 0; i < 10; i++) {
+    particlesArray.push(new Particle());
+  }
 });
 
 canvas.addEventListener("mousemove", function (event) {
   mouse.x = event.x;
   mouse.y = event.y;
-  particlesArray.push(new Particle());
+  for (let i = 0; i < 5; i++) {
+    particlesArray.push(new Particle());
+  }
 });
 
 class Particle {
@@ -33,6 +39,7 @@ class Particle {
     this.size = Math.random() * 20 + 1;
     this.speedX = Math.random() * 3 - 1.5;
     this.speedY = Math.random() * 3 - 1.5;
+    this.color = `hsl(` + hue + `, 100%, 50%)`;
   }
   update() {
     this.x += this.speedX;
@@ -40,26 +47,9 @@ class Particle {
     if (this.size > 0.2) this.size -= 0.1;
   }
   draw() {
-    let dx = mouse.x - this.x;
-    let dy = mouse.y - this.y;
-    let distance = Math.sqrt(dx * dx + dy * dy);
-    if (distance < 150) {
-      ctx.fillStyle = `#FFE670`;
-      ctx.strokeStyle = `white`;
-    } else if (distance > 300 && distance < 450) {
-      ctx.fillStyle = `#5DF8DB`;
-      ctx.strokeStyle = `#415EBC`;
-    } else if (distance > 450) {
-      ctx.fillStyle = `#D7F2C1`;
-      ctx.strokeStyle = `#A3D09B`;
-    } else {
-      ctx.fillStyle = `#F4646A`;
-      ctx.strokeStyle = `#F9DECE`;
-    }
-    ctx.lineWidth = 5;
+    ctx.fillStyle = this.color;
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.stroke();
     ctx.fill();
   }
 }
@@ -77,9 +67,11 @@ function handleParticles() {
 }
 
 function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  //ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = `rgba(0, 0, 0, 0.02)`;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
   handleParticles();
-
+  hue++;
   requestAnimationFrame(animate);
 }
 animate();
