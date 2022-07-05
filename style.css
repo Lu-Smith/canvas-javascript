@@ -36,11 +36,11 @@ footer div {
   margin-top: 40px;
 }
 
-
 @media (max-width: 820px) {
- footer {
-  transform: translate(15%, 10%);
+  footer {
+    transform: translate(15%, 10%);
   }
+}
 @media (max-width: 480px) {
   #canvas1 {
     width: 480px;
